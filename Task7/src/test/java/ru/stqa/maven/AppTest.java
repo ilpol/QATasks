@@ -2,6 +2,7 @@ package ru.stqa.maven;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.junit.After;
 import org.junit.Before;
@@ -23,8 +24,7 @@ public class AppTest
     @Before
     public void start() {
         driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
-        wait = new WebDriverWait(driver, 1000);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @After
@@ -40,18 +40,27 @@ public class AppTest
         driver.findElement(By.name("password")).sendKeys("admin");
         driver.findElement(By.name("login")).click();
         List<WebElement> links = driver.findElements(By.xpath("//li[@id='app-']"));
-        System.out.println("links.size()=  " + links.size());
-        for (int i=links.size() - 1; i>=0; i--) {
-            List<WebElement> linksUpdate = driver.findElements(By.xpath("//li[@id='app-']"));
-            linksUpdate.get(i).click();
-            /*List<WebElement> subLinks = linksUpdate.get(i).findElements(By.xpath(".//li"));
+        for (int i=0; i<links.size(); i++) {
+            //scroll page in order for element to be clickable
+            JavascriptExecutor jse = (JavascriptExecutor)driver;
+            jse.executeScript("scroll(0, 250)");
+
+            links.get(i).click();
+            
+
+            //update
+            links = driver.findElements(By.xpath("//li[@id='app-']"));
+
+            List<WebElement> subLinks = (links.get(i)).findElements(By.cssSelector("li"));
             for (int j=0; j< subLinks.size(); j++) {
-                System.out.println("subLinks.size() = " + subLinks.size());
-                System.out.println("before j = " + j);
                 subLinks.get(j).click();
-                System.out.println("after j = " + j);
-            }*/
+                driver.findElement(By.xpath("//h1"));
+
+                //update
+                links = driver.findElements(By.xpath("//li[@id='app-']"));
+                subLinks = (links.get(i)).findElements(By.cssSelector("li"));
+            }
+
         }
-        //wait.until(titleIs("My Store"));
     }
 }
