@@ -7,11 +7,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertTrue;
 
 public class AppTest 
 {
@@ -34,14 +34,11 @@ public class AppTest
     @Test
     public void myFirstTest() throws InterruptedException {
         driver.get("http://localhost/litecart/");
-        
         List<WebElement> carts = driver.findElements(By.xpath("//li[contains(@class,'product')]"));
-        System.out.println("links.size()=  " + carts.size());
+        List<WebElement> stickers;
         for (int i=0; i<carts.size() ; i++) {
-            List<WebElement> stickers = carts.get(i).findElements(By.xpath(".//div[contains(@class,'sticker')]"));
-            if (stickers.isEmpty()){
-                System.out.println("no sticker");
-            }
+            stickers = carts.get(i).findElements(By.xpath(".//div[contains(@class,'sticker')]"));
+            assertTrue(stickers.size() == 1);
         }
     }
 }
