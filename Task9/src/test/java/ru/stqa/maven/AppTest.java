@@ -94,7 +94,7 @@ public class AppTest
         List<String> timeZonesText;
         for (String linkToZones : linksToZones) {
             driver.get(linkToZones);
-            timeZones = driver.findElements(By.xpath("//table[@class='dataTable']//tr[not(@class='header')]/td[3]"));
+            timeZones = driver.findElements(By.xpath("//table[@class='dataTable']//tr[not(@class='header')]/td[3]//option[@selected='selected']"));
             timeZonesText = new ArrayList<>();
             for (WebElement timeZone : timeZones) {
                 timeZonesText.add(timeZone.getAttribute("textContent"));
