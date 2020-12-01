@@ -2,6 +2,7 @@ package ru.stqa.maven;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.junit.After;
 import org.junit.Before;
@@ -48,6 +49,9 @@ public class AppTest {
                 existingWindows.remove(mainWindow);
                 String newWindow = existingWindows.iterator().next();
                 driver.switchTo().window(newWindow);
+                //wait for page to load
+                new WebDriverWait(driver, 20).until(
+                    webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
                 driver.close();
                 driver.switchTo().window(mainWindow);
         }
