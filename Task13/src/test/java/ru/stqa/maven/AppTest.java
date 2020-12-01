@@ -45,14 +45,19 @@ public class AppTest {
         String checkoutXPath = "//div[@id='cart']//a[@class='link']";
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath(checkoutXPath)));
         driver.findElement(By.xpath(checkoutXPath)).click();
+        String removeButtonXPath = "//button[@value='Remove']";
         for (int i = 1; i <= 3; i++){
-                String removeButtonXPath = "//button[@value='Remove']";
+            if (driver.findElements(By.xpath(removeButtonXPath)).size() > 0) {
                 WebElement removeButton = driver.findElement(By.xpath(removeButtonXPath));
                 wait.until(ExpectedConditions.elementToBeClickable(removeButton));
                 WebElement table = driver.findElement(By.xpath("//div[@id='box-checkout-summary']"));
                 Thread.sleep(1000);
                 removeButton.click();
                 wait.until(ExpectedConditions.stalenessOf(table));
+            }
+            else {
+                break;
+            }
         }
     }
 }
