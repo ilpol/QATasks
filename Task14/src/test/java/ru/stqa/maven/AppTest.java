@@ -44,8 +44,28 @@ public class AppTest {
         String mainWindow = driver.getWindowHandle();
         List<WebElement> links = driver.findElements(By.xpath("//form//tr//a[not(contains(@id,'address-format-hint'))]"));
         for (WebElement link : links) {
+                Set<String> oldWindows = driver.getWindowHandles();
                 link.click();
                 Set<String> existingWindows = driver.getWindowHandles();
+
+                //wait for new window to open
+                long start = System.currentTimeMillis();
+                int timeout = 300000;
+                long end = start + timeout;
+                boolean isOpen = true;
+                while(oldWindows.size()==existingWindows.size()) {
+                  existingWindows = driver.getWindowHandles();
+                  if(System.currentTimeMillis() > end) {
+                      isOpen = false;
+                      break;
+                  }
+                }
+
+                if (!isOpen) {
+                    System.out.println("can not open window");
+                    assert false;
+                }
+
                 existingWindows.remove(mainWindow);
                 String newWindow = existingWindows.iterator().next();
                 driver.switchTo().window(newWindow);
